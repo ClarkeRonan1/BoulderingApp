@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "436737658644",
+    "firebase_url": "https://boulderingapp-75633.firebaseio.com",
+    "project_id": "boulderingapp-75633",
+    "storage_bucket": "boulderingapp-75633.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:436737658644:android:25b552998e879462",
+        "android_client_info": {
+          "package_name": "com.example.ronanclarke.boulderingapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "436737658644-48s04im96r07kbvpp9h5fb4i4j43sl3l.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.ronanclarke.boulderingapp",
+            "certificate_hash": "80cd72d98e5d25546b6869c8c067c3e7794a0131"
+          }
+        },
+        {
+          "client_id": "436737658644-e0kvaikskpmsra8olf0o0lo07f8916nj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCNTUh8DKGOC55ghM42oM_I-EU7dLXMhqw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "436737658644-e0kvaikskpmsra8olf0o0lo07f8916nj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
