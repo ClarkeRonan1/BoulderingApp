@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity
         }
         else
         {
-             //verify the current user
+            //verify the current user
             currentUserID = mAuth.getCurrentUser().getUid();
             //using users id, make a connection to the Users collection
             firebaseFirestore.collection("Users").document(currentUserID).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>()
