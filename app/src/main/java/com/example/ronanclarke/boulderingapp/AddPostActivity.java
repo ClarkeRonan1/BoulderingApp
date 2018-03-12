@@ -123,16 +123,24 @@ public class AddPostActivity extends AppCompatActivity
                     cropImage();
 
                 }
-                CropImage.activity()
-                        .setGuidelines(CropImageView.Guidelines.ON)
-                        .setAspectRatio(1,1)
-                        .start(AddPostActivity.this);
+                //Call function cropImage
+                cropImage();
+
 
             }
         });
-        //Use the same code as UserProfileActivity
 
+        //Onclick listener for add new post button
+        addPostBTN.setOnClickListener(new View.OnClickListener()
+        {
 
+            @Override
+            public void onClick(View view)
+            {
+                
+                //final String status = a
+            }
+        });
 
     }
 

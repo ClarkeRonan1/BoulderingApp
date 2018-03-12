@@ -16,6 +16,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"></android.support.v7.widget.Toolbar>
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/post_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="60dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/add_post_button"
         android:layout_width="64dp"
