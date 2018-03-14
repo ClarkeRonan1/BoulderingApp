@@ -3,6 +3,7 @@ package com.example.ronanclarke.boulderingapp;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateFormat;
 import android.util.EventLog;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,22 +16,26 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.Date;
 import java.util.List;
 
 /**
  * Created by ronanclarke on 13/03/2018.
+ * This activity is used with an adapter to manage the post parameters
+ * from the Post class. The PostViewHolder is used to hold a view
+ * representing a single list parameter.
  */
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder>
 {
-    private List<Post> items;
+    public List<Post> items;
     public Context context;
 
     private FirebaseFirestore firebaseFirestore;
 
     public PostAdapter(List<Post> items)
     {
-        this.items =items;
+        this.items = items;
     }
 
     @Override
@@ -51,8 +56,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         //use getters here
         String postID = items.get(i).getPostID();
         String postStatus = items.get(i).getPostStatus();
-        final String userName = items.get(i).getUserName();
-        final String imageURL = items.get(i).getImageURL();
+        String userName = items.get(i).getUserName();
+        String imageURL = items.get(i).getImageURL();
         String userID = items.get(i).getUserID();
         float routeTime = items.get(i).getRouteTime();
 
@@ -76,8 +81,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
                 {
                     //String postID = task.getResult().getString("postID");
                     //String postStatus = task.getResult().getString("postStatus");
-                    //String userName = task.getResult().getString(username);
-                    //String imageURL = task.getResult().getString(imageURL);
+                    String userName = task.getResult().getString("name");
+                    String imageURL = task.getResult().getString("image");
                     //String userID = task.getResult().getString(userID);
                     //float routeTime = task.getResult().getInt("routeTime);
 
@@ -92,6 +97,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         });
 
 
+
     }
 
     //Workout the size of the list
@@ -104,12 +110,12 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     public static class PostViewHolder extends RecyclerView.ViewHolder
     {
         public View postView;
-        public TextView postID;
-        public TextView postStatus;
-        public TextView userName;
-        public ImageView imageURL;
-        public TextView routeTime;
-        public TextView userID;
+        public TextView postIDTV;
+        public TextView postStatusTV;
+        public TextView userNameTV;
+        public ImageView imageURLTV;
+        public TextView routeTimeTV;
+        public TextView userIDTV;
 
         public PostViewHolder(View rowView)
         {
@@ -128,7 +134,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         }
         public void setUserName(String userName)
         {
-            //userName = postView.findViewById(R.id.user_name);
+            userNameTV = postView.findViewById(R.id.user_name);
         }
         public void setImageURL(String imageURL)
         {
@@ -146,6 +152,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         public void setupUserInfo(String username, String imageURL)
         {
 
+        }
+        public void setTime(String date)
+        {
+            //blogDate = postView.findViewById(R.id.)
         }
 
     }

@@ -2,6 +2,8 @@ package com.example.ronanclarke.boulderingapp;
 
 /**
  * Created by ronanclarke on 13/03/2018.
+ * This activity is used to store the information of each post.
+ * This is done by sending and retrieving from the PostAdapter
  */
 
 public class Post
@@ -12,6 +14,12 @@ public class Post
     private String userID;
     private String imageURL;
     private float routeTime;
+
+    public Post()
+    {
+        //This will be another constructor
+        //to allow for less inputs
+    }
 
     public Post(String userName,String postID,
                 String postStatus,
@@ -26,11 +34,7 @@ public class Post
         this.routeTime = routeTime;
     }
 
-    public Post()
-    {
-        //This will be another constructor
-        //to allow for less inputs
-    }
+
 
     public String getUserName() {
         return userName;
