@@ -35,6 +35,8 @@ import com.theartofdev.edmodo.cropper.CropImageView;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
+
 /*
 This activity will be used to add a new post once the user has recorded a time for their climb.
 So the time will be carried from the TimeClimbActivity and will allow the user to put their time
@@ -137,8 +139,16 @@ public class AddPostActivity extends AppCompatActivity
             @Override
             public void onClick(View view)
             {
-                
-                //final String status = a
+                //Take user input for status
+                final String status = userStatus.getText().toString();
+
+                //Check if user status input filled
+                if(!TextUtils.isEmpty(status))
+                {
+                    //Give this status a unique ID
+                    final String assignID = UUID.randomUUID().toString();
+
+                }
             }
         });
 

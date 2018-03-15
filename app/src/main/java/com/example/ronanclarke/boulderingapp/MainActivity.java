@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity
     private Toolbar homeTB;
     private FirebaseAuth mAuth;
     private FirebaseFirestore firebaseFirestore;
-
+    private NewsFeedFragment newsFeedFragment;
     private String currentUserID;
 
     private FloatingActionButton addPostBTN;
@@ -55,6 +55,9 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(homeTB);
 
         getSupportActionBar().setTitle("Photo Blog");
+
+        //Implement the newsfeed Fragment
+        newsFeedFragment = new NewsFeedFragment();
 
         addPostBTN = findViewById(R.id.add_post_button);
         //Listen for button click on make new post button
