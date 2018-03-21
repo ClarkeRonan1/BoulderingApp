@@ -1,10 +1,16 @@
 package com.example.ronanclarke.boulderingapp;
 
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.Fragment;
 import android.content.Intent;
+import android.media.session.PlaybackState;
 import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,6 +24,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
+
 /*
 This activity will be used to display the users home page. This is where the user can
 time climbs and in turn add new posts to the app. The user also has access to their profile and
@@ -28,45 +36,67 @@ be constructed by the user.
 
 public class MainActivity extends AppCompatActivity
 {
-
-
-    //variables
-    private Toolbar homeTB;
+    private Toolbar mainToolbar;
     private FirebaseAuth mAuth;
     private FirebaseFirestore firebaseFirestore;
-    private NewsFeedFragment newsFeedFragment;
-    private String currentUserID;
 
-    private FloatingActionButton addPostBTN;
+    private String current_user_id;
+
+    private FloatingActionButton addPostBtn;
+
+    private BottomNavigationView mainbottomNav;
+
+    private NewsFeedFragment homeFragment;
+
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //Make instance of firebase authentication
-        mAuth = FirebaseAuth.getInstance();
 
-        //Make instance of firestore
+        mAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
 
-        //Set toolbar with name photo blog
-        homeTB = (Toolbar) findViewById(R.id.home_toolbar);
-        setSupportActionBar(homeTB);
+        mainToolbar = (Toolbar) findViewById(R.id.main_toolbar);
+        setSupportActionBar(mainToolbar);
 
-        getSupportActionBar().setTitle("Photo Blog");
+        getSupportActionBar().setTitle("Latest Climbs");
 
-        //Implement the newsfeed Fragment
-        newsFeedFragment = new NewsFeedFragment();
+        mainbottomNav = findViewById(R.id.mainBottomNav);
 
-        addPostBTN = findViewById(R.id.add_post_button);
-        //Listen for button click on make new post button
-        addPostBTN.setOnClickListener(new View.OnClickListener()
-        {
+        // FRAGMENTS
+        homeFragment = new NewsFeedFragment();
+        replaceFragment(homeFragment);
+
+        mainbottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
-            public void onClick(View v)
-            {
-                //Send user to activity for making post
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+                switch (item.getItemId())
+                {
+
+                    case R.id.newsfeed :
+                        replaceFragment(homeFragment);
+                        return true;
+
+                    case R.id.my_profile:
+                        openUserProfile();
+                        return true;
+
+                    default:
+                        return false;
+
+
+                }
+            }
+        });
+
+
+        addPostBtn = findViewById(R.id.add_post_btn);
+        addPostBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
                 Intent newPostIntent = new Intent(MainActivity.this, AddPostActivity.class);
                 startActivity(newPostIntent);
 
@@ -76,46 +106,42 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    @Override
-    protected void onStart()
+    private void openUserProfile()
     {
+        Intent newPostIntent = new Intent(MainActivity.this, UserProfileActivity.class);
+        startActivity(newPostIntent);
+        //finish();
+    }
+
+    @Override
+    protected void onStart() {
         super.onStart();
 
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        //If there isn't a user signed in
-        if(currentUser == null)
-        {
-            //Send this user to the login page so they can sign in
-            returnToSignIn();
+        if(currentUser == null){
 
-        }
-        else
-        {
-            //verify the current user
-            currentUserID = mAuth.getCurrentUser().getUid();
-            //using users id, make a connection to the Users collection
-            firebaseFirestore.collection("Users").document(currentUserID).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>()
-            {
+            sendToLogin();
+
+        } else {
+
+            current_user_id = mAuth.getCurrentUser().getUid();
+
+            firebaseFirestore.collection("Users").document(current_user_id).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
 
+                    if(task.isSuccessful()){
 
-                    if(task.isSuccessful())
-                    {
+                        if(!task.getResult().exists()){
 
-                        if(!task.getResult().exists())
-                        {
-                            //Send the user to the Setup Activity
                             Intent setupIntent = new Intent(MainActivity.this, UserProfileActivity.class);
                             startActivity(setupIntent);
                             finish();
 
                         }
 
-                    }
-                    else //If task is unsuccessful
-                    {
-                        //Display error message
+                    } else {
+
                         String errorMessage = task.getException().getMessage();
                         Toast.makeText(MainActivity.this, "Error : " + errorMessage, Toast.LENGTH_LONG).show();
 
@@ -131,34 +157,30 @@ public class MainActivity extends AppCompatActivity
 
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
-        //Inflate the main menu toolbar
+    public boolean onCreateOptionsMenu(Menu menu) {
+
         getMenuInflater().inflate(R.menu.home_menu, menu);
         return true;
 
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-        //Switch case statement to determine which option is chosen
-        switch (item.getItemId())
-        {
-            //where logout pressed
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+
             case R.id.logout_button:
-                //call function log out
                 signOut();
                 return true;
-            //where user settings pressed
+
             case R.id.settings_button:
-                //send user to the setup activity
+
                 Intent settingsIntent = new Intent(MainActivity.this, UserProfileActivity.class);
                 startActivity(settingsIntent);
 
                 return true;
 
-            //Otherwise neither of the buttons have been pressed
+
             default:
                 return false;
 
@@ -166,22 +188,30 @@ public class MainActivity extends AppCompatActivity
         }
 
     }
-    //Function for logging out the user
+
     private void signOut()
     {
 
-        //Use firebase authorisation to signout user
+
         mAuth.signOut();
-        //Call function to send user back to login activity
-        returnToSignIn();
+        sendToLogin();
     }
-    //Function to send user to login activity
-    private void returnToSignIn()
+
+    private void sendToLogin()
     {
-        //Send user to Login Activity
+
         Intent loginIntent = new Intent(MainActivity.this, SignInActivity.class);
         startActivity(loginIntent);
         finish();
+
+    }
+
+    private void replaceFragment(Fragment fragment)
+    {
+
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.main_container, fragment);
+        fragmentTransaction.commit();
 
     }
 

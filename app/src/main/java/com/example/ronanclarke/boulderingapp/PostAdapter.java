@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -26,147 +28,133 @@ import java.util.List;
  * representing a single list parameter.
  */
 
-public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder>
+public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>
 {
-    public List<Post> items;
+    public List<Post> postList;
     public Context context;
 
-    private FirebaseFirestore firebaseFirestore;
+    private FirebaseFirestore mFirestore;
 
-    public PostAdapter(List<Post> items)
+    public PostAdapter(List<Post> postList)
     {
-        this.items = items;
+
+        this.postList = postList;
+
     }
 
     @Override
-    public PostViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
     {
-        //Put layout inflator here
-        View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.post_row,parent,false);
+
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.post_row, parent, false);
         context = parent.getContext();
-        firebaseFirestore = FirebaseFirestore.getInstance();
-
-        return new PostViewHolder(v);
+        mFirestore = FirebaseFirestore.getInstance();
+        return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(final PostViewHolder viewHolder, int i)
+    public void onBindViewHolder(final ViewHolder holder, int i)
     {
-        //use getters here
-        String postID = items.get(i).getPostID();
-        String postStatus = items.get(i).getPostStatus();
-        String userName = items.get(i).getUserName();
-        String imageURL = items.get(i).getImageURL();
-        String userID = items.get(i).getUserID();
-        float routeTime = items.get(i).getRouteTime();
 
-        //use setters here
-        viewHolder.setPostID(postID);
-        viewHolder.setPostStatus(postStatus);
-        viewHolder.setUserName(userName);
-        viewHolder.setImageURL(imageURL);
-        viewHolder.setUserID(userID);
-        viewHolder.setRouteTime(routeTime);
+        String desc_data = postList.get(i).getDesc();
+        holder.setDescText(desc_data);
 
-        //Connect to Firebase to collect information
-        firebaseFirestore.collection("Users").document(userID).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>()
-        {
-            //
+        String image_url = postList.get(i).getImage_url();
+        holder.setBlogImage(image_url);
+
+        String user_id = postList.get(i).getUser_id();
+        //User Data will be retrieved here...
+        mFirestore.collection("Users").document(user_id).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task)
-            {
-                //If connection made successfully
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+
                 if(task.isSuccessful())
                 {
-                    //String postID = task.getResult().getString("postID");
-                    //String postStatus = task.getResult().getString("postStatus");
-                    String userName = task.getResult().getString("name");
-                    String imageURL = task.getResult().getString("image");
-                    //String userID = task.getResult().getString(userID);
-                    //float routeTime = task.getResult().getInt("routeTime);
 
-                    viewHolder.setupUserInfo(userName,imageURL);
+                    String userName = task.getResult().getString("name");
+                    String userImage = task.getResult().getString("image");
+
+                    holder.setUserData(userName, userImage);
+
+
                 }
-                //Else
                 else
                 {
-                    //display error message
+
+                    //Firebase Exception
+
                 }
+
             }
         });
 
-
-
     }
 
-    //Workout the size of the list
     @Override
     public int getItemCount()
     {
-        return items.size();
+        return postList.size();
     }
 
-    public static class PostViewHolder extends RecyclerView.ViewHolder
+    public class ViewHolder extends RecyclerView.ViewHolder
     {
-        public View postView;
-        public TextView postIDTV;
-        public TextView postStatusTV;
-        public TextView userNameTV;
-        public ImageView imageURLTV;
-        public TextView routeTimeTV;
-        public TextView userIDTV;
 
-        public PostViewHolder(View rowView)
-        {
-            super(rowView);
-            postView = rowView;
-        }
+        private View holdView;
 
-        public void setPostID(String postID)
+        private TextView postStatusTV;
+        private ImageView postPicIV;
+        private TextView postTimeStampTV;
+
+        private TextView postUserNameTV;
+        private ImageView userProfilerIV;
+
+        public ViewHolder(View itemView)
         {
-            //set layout file accordingly
-            //postID = postView.findViewById(R.id.post_id);
-        }
-        public void setPostStatus(String postStatus)
-        {
-            //postStatus = postView.findViewById(R.id.status_text);
-        }
-        public void setUserName(String userName)
-        {
-            userNameTV = postView.findViewById(R.id.user_name);
-        }
-        public void setImageURL(String imageURL)
-        {
-            //imageURL = postView.findViewById(R.id.image_url);
-        }
-        public void setUserID(String userID)
-        {
-            //userID = postView.findViewById(R.id.user_id)
-        }
-        public void setRouteTime(float routeTime)
-        {
-            //routeTime = postView.findViewById(R.id.route_time);
+            super(itemView);
+            holdView = itemView;
         }
 
-        public void setupUserInfo(String username, String imageURL)
-        {
+        public void setDescText(String descText){
+
+            postStatusTV = holdView.findViewById(R.id.post_status);
+            postStatusTV.setText(descText);
 
         }
+
+        public void setBlogImage(String downloadUri)
+        {
+
+            postPicIV = holdView.findViewById(R.id.post_route_image);
+            RequestOptions requestOptions = new RequestOptions();
+            requestOptions.placeholder(R.drawable.ic_launcher_background);
+            Glide.with(context).applyDefaultRequestOptions(requestOptions).load(downloadUri).into(postPicIV);
+
+        }
+
         public void setTime(String date)
         {
-            //blogDate = postView.findViewById(R.id.)
+
+            postTimeStampTV = holdView.findViewById(R.id.post_timestamp);
+            postTimeStampTV.setText(date);
+
+        }
+
+        public void setUserData(String name, String image)
+        {
+
+            userProfilerIV= holdView.findViewById(R.id.post_profiler_image);
+            postUserNameTV= holdView.findViewById(R.id.post_username);
+
+            postUserNameTV.setText(name);
+
+
+            RequestOptions placeholderOption = new RequestOptions();
+            placeholderOption.placeholder(R.drawable.ic_launcher_background);
+
+            Glide.with(context).applyDefaultRequestOptions(placeholderOption).load(image).into(userProfilerIV);
+
         }
 
     }
 
-
-
-
-
-
-
-
-
 }
-

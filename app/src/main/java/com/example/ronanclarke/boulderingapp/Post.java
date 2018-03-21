@@ -8,88 +8,53 @@ package com.example.ronanclarke.boulderingapp;
 
 public class Post
 {
-    private String userName;
-    private String postID;
-    private String postStatus;
-    private String userID;
-    private String imageURL;
-    private float routeTime;
+    public String user_id, image_url, desc, image_thumb;
 
     public Post()
     {
-        //This will be another constructor
-        //to allow for less inputs
+
     }
 
-    public Post(String userName,String postID,
-                String postStatus,
-                String userID,String imageURL,
-                float routeTime)
-    {
-        this.userName = userName;
-        this.postID = postID;
-        this.postStatus = postStatus;
-        this.userID = userID;
-        this.imageURL = imageURL;
-        this.routeTime = routeTime;
+    public Post(String user_id, String image_url, String desc, String image_thumb) {
+        this.user_id = user_id;
+        this.image_url = image_url;
+        this.desc = desc;
+        this.image_thumb = image_thumb;
+    }
+
+    public String getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(String user_id) {
+        this.user_id = user_id;
+    }
+
+    public String getImage_url() {
+        return image_url;
+    }
+
+    public void setImage_url(String image_url) {
+        this.image_url = image_url;
+    }
+
+    public String getDesc() {
+        return desc;
+    }
+
+    public void setDesc(String desc) {
+        this.desc = desc;
+    }
+
+    public String getImage_thumb() {
+        return image_thumb;
+    }
+
+    public void setImage_thumb(String image_thumb) {
+        this.image_thumb = image_thumb;
     }
 
 
 
-    public String getUserName() {
-        return userName;
-    }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public String getPostID()
-    {
-        return postID;
-    }
-
-    public void setPostID(String postID)
-    {
-        this.postID = postID;
-    }
-
-    public String getPostStatus()
-    {
-        return postStatus;
-    }
-
-    public void setPostStatus(String postStatus)
-    {
-        this.postStatus = postStatus;
-    }
-
-    public String getUserID()
-    {
-        return userID;
-    }
-
-    public void setUserID(String userID)
-    {
-        this.userID = userID;
-    }
-
-    public String getImageURL()
-    {
-        return imageURL;
-    }
-
-    public void setImageURL(String imageURL)
-    {
-        this.imageURL = imageURL;
-    }
-
-    public float getRouteTime() {
-        return routeTime;
-    }
-
-    public void setRouteTime(float routeTime)
-    {
-        this.routeTime = routeTime;
-    }
 }

@@ -6,12 +6,16 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -51,6 +55,9 @@ public class UserProfileActivity extends AppCompatActivity
     private String userID;
 
     private boolean isChanged = false;
+    private NewsFeedFragment homeFragment;
+    private BottomNavigationView mainbottomNav;
+
 
     private EditText usernameET;
     private Button usernameBTN;
@@ -76,6 +83,12 @@ public class UserProfileActivity extends AppCompatActivity
         //get user id from Firebase Authentication variable
         userID = mAuth.getCurrentUser().getUid();
 
+        mainbottomNav = findViewById(R.id.mainBottomNav);
+
+        // FRAGMENTS
+        homeFragment = new NewsFeedFragment();
+        replaceFragment(homeFragment);
+
         //Make instance of firestore database and firestore storage file
         firebaseFirestore = FirebaseFirestore.getInstance();
         storageReference = FirebaseStorage.getInstance().getReference();
@@ -88,6 +101,29 @@ public class UserProfileActivity extends AppCompatActivity
 
         progressPB.setVisibility(View.VISIBLE);
         usernameBTN.setEnabled(false);
+
+        mainbottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+                switch (item.getItemId())
+                {
+
+                    case R.id.newsfeed :
+                        replaceFragment(homeFragment);
+                        return true;
+
+                    case R.id.my_profile:
+                        return true;
+
+                    default:
+                        return false;
+
+
+                }
+            }
+        });
+
 
         //Check Users collection in the Firebase firestore database
         firebaseFirestore.collection("Users").document(userID).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>()
@@ -302,6 +338,16 @@ public class UserProfileActivity extends AppCompatActivity
             }
         });
 
+
+    }
+    private void replaceFragment(Fragment fragment)
+    {
+        //finish();
+        //Intent mainIntent = new Intent(UserProfileActivity.this, MainActivity.class);
+        //startActivity(mainIntent);
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.main_container, fragment);
+        fragmentTransaction.commit();
 
     }
 
