@@ -110,8 +110,8 @@ public class NewsFeedFragment extends Fragment
             //User 1 should only see posts from users they follow, user 2 in this
             //case. So user 1 signed in, populate newsfeed where users.following
             //is equal to posts.user_id specified.
-            Query displayToFollowers = mFirestore.collection("Posts");
-            displayToFollowers.orderBy("following").equals("following");
+            //Query displayToFollowers = mFirestore.collection("Posts");
+            //displayToFollowers.orderBy("following").equals("following");
 
 
         }

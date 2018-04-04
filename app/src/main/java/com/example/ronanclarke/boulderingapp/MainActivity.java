@@ -179,6 +179,8 @@ public class MainActivity extends AppCompatActivity
                 startActivity(settingsIntent);
 
                 return true;
+            case R.id.search_button:
+                searchUsers();
 
 
             default:
@@ -188,6 +190,8 @@ public class MainActivity extends AppCompatActivity
         }
 
     }
+
+
 
     private void signOut()
     {
@@ -213,6 +217,14 @@ public class MainActivity extends AppCompatActivity
         fragmentTransaction.replace(R.id.main_container, fragment);
         fragmentTransaction.commit();
 
+    }
+
+    private void searchUsers()
+    {
+        //Send user to search user activity.
+        Intent searchUsersIntent = new Intent(MainActivity.this,DisplayUsers.class);
+        startActivity(searchUsersIntent);
+        return;
     }
 
 }

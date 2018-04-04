@@ -88,10 +88,10 @@ public class AddPostActivity extends AppCompatActivity
         getSupportActionBar().setTitle("Add New Post");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        newPostImage = findViewById(R.id.new_post_image);
-        newPostDesc = findViewById(R.id.new_post_desc);
-        newPostBtn = findViewById(R.id.post_btn);
-        newPostProgress = findViewById(R.id.new_post_progress);
+        newPostImage = findViewById(R.id.post_route_image);
+        newPostDesc = findViewById(R.id.user_status);
+        newPostBtn = findViewById(R.id.add_post_button);
+        //newPostProgress = findViewById(R.id.new_post_progress);
 
         newPostImage.setOnClickListener(new View.OnClickListener() {
             @Override

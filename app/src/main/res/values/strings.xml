@@ -4,4 +4,5 @@
     <string name="action_search_text">Search</string>
     <string name="action_setting_text">AccountSettings</string>
     <string name="action_logout_text">Logout</string>
+    <string name="title_activity_fellow_climber">FellowClimber</string>
 </resources>
